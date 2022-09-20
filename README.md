@@ -1,14 +1,19 @@
-# (TODO: your game's title)
+# Strooperz
 
-Author: (TODO: your name)
+Author: Alan Lee / soohyun3
 
-Design: (TODO: In two sentences or fewer, describe what is new and interesting about your game.)
+Design: Have you ever heard of the stroop test? This is an enhanced stroop test with sound!
 
 Screen Shot:
 
 ![Screen Shot](screenshot.png)
 
 How To Play:
+
+Red/Green/Blue/Yellow/Purple = D/F/Space/J/K keys
+
+Press the colors of the TEXT in the right order.
+Do not confuse with the background color or whatever the audio tells you!
 
 (TODO: describe the controls and (if needed) goals/strategy.)
 
