@@ -17,8 +17,8 @@ struct PlayMode : Mode {
 	virtual void update(float elapsed) override;
 	virtual void draw(glm::uvec2 const &drawable_size) override;
 
-	void PlayMode::game_end(bool didWin);
-	void PlayMode::key_pressed(int color);
+	void game_end(bool didWin);
+	void key_pressed(int color);
 
 	//----- game state -----
 	enum GameState {
