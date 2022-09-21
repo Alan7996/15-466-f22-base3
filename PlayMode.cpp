@@ -285,11 +285,11 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 				glm::u8vec4(0xff, 0xff, 0xff, 0x00));
 
 			lines.draw_text("Time : " + std::to_string(static_cast<int>(total_time)),
-				glm::vec3(aspect - 5.0f * H, -1.0 + 0.1f * H, 0.0),
+				glm::vec3(aspect - 4.0f * H, -1.0 + 0.1f * H, 0.0),
 				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
 				glm::u8vec4(0x00, 0x00, 0x00, 0x00));
 			lines.draw_text("Time : " + std::to_string(static_cast<int>(total_time)),
-				glm::vec3(aspect - 5.0f * H + ofs, -1.0 + + 0.1f * H + ofs, 0.0),
+				glm::vec3(aspect - 4.0f * H + ofs, -1.0 + + 0.1f * H + ofs, 0.0),
 				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
 				glm::u8vec4(0xff, 0xff, 0xff, 0x00));
 		} else {
