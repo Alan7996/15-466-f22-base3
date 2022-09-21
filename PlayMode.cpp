@@ -36,9 +36,9 @@ Load< Scene > strooperz_scene(LoadTagDefault, []() -> Scene const * {
 	});
 });
 
-// Load< Sound::Sample > bg_sample(LoadTagDefault, []() -> Sound::Sample const * {
-// 	return new Sound::Sample(data_path("bg.wav"));
-// });
+Load< Sound::Sample > bg_sample(LoadTagDefault, []() -> Sound::Sample const * {
+	return new Sound::Sample(data_path("bg.wav"));
+});
 
 Load< Sound::Sample > red_sample(LoadTagDefault, []() -> Sound::Sample const * {
 	return new Sound::Sample(data_path("red.wav"));
@@ -60,7 +60,9 @@ Load< Sound::Sample > purple_sample(LoadTagDefault, []() -> Sound::Sample const 
 	return new Sound::Sample(data_path("purple.wav"));
 });
 
-PlayMode::PlayMode() : scene(*strooperz_scene) {
+PlayMode::PlayMode() : scene(*strooperz_scene), red_sound(*red_sample), 
+						green_sound(*green_sample), blue_sound(*blue_sample), 
+						yellow_sound(*yellow_sample), purple_sound(*purple_sample) {
 
 	gameState = PLAYING;
 
@@ -114,9 +116,8 @@ PlayMode::PlayMode() : scene(*strooperz_scene) {
 		glm::vec3 frame_at = frame[3];
 		Sound::listener.set_position_right(frame_at, frame_right, 1.0f / 60.0f);
 	}
-	//start music loop playing:
-	// (note: position will be over-ridden in update())
-	// leg_tip_loop = Sound::loop_3D(*bg_sample, 1.0f, get_leg_tip_position(), 10.0f);
+	//start bg loop playing:)
+	bg_loop = Sound::loop(*bg_sample);
 }
 
 PlayMode::~PlayMode() {
@@ -190,18 +191,39 @@ void PlayMode::update(float elapsed) {
 
 		gotCorrect = false;
 		elapsed_time_since = 0;
-		color_interval -= 0.05f;
+		color_interval = color_interval <= 0.8f ? 0.8f : color_interval - 0.1f;
 
 		// random number generation based on https://stackoverflow.com/questions/5008804/generating-a-random-integer-from-a-range
 		std::random_device rd;
 		std::mt19937 rng(rd());
 		std::uniform_int_distribution<int> row(0, 4);
 		std::uniform_int_distribution<int> col(0, 4);
+		std::uniform_int_distribution<int> audio(0, 4);
 		
 		activeTextRow = row(rng);
 		activeTextCol = col(rng);
 
 		texts[activeTextRow][activeTextCol]->transform->position = text_display_pos[activeTextRow];
+
+		switch (audio(rng)) {
+			case 0:
+				Sound::play(red_sound);
+				break;
+			case 1:
+				Sound::play(blue_sound);
+				break;
+			case 2:
+				Sound::play(green_sound);
+				break;
+			case 3:
+				Sound::play(yellow_sound);
+				break;
+			case 4:
+				Sound::play(purple_sound);
+				break;
+			default:
+				break;
+		}
 
 		gameState = PLAYING;
 	}

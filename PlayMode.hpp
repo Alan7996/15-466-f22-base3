@@ -31,6 +31,12 @@ struct PlayMode : Mode {
 	Scene scene;
 
 	//in-game objects to be managed:
+	Sound::Sample red_sound;
+	Sound::Sample green_sound;
+	Sound::Sample blue_sound;
+	Sound::Sample yellow_sound;
+	Sound::Sample purple_sound;
+
 	Scene::Drawable *texts[5][5];
 	Scene::Transform *gameWin;
 	Scene::Transform *gameLose;
@@ -48,8 +54,8 @@ struct PlayMode : Mode {
 	float color_interval = 3;
 	float total_time = 60;
 
-	//music coming from the tip of the leg (as a demonstration):
-	// std::shared_ptr< Sound::PlayingSample > leg_tip_loop;
+	//background music
+	std::shared_ptr< Sound::PlayingSample > bg_loop;
 	
 	//camera:
 	Scene::Camera *camera = nullptr;
