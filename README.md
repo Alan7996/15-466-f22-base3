@@ -12,7 +12,7 @@ How To Play:
 
 Red/Green/Blue/Yellow/Purple = D/F/Space/J/K keys
 
-Press the colors of the TEXT in the right order.
+Press the color of the text in time.
 Do not confuse with the background color or whatever the audio tells you!
 
 (TODO: describe the controls and (if needed) goals/strategy.)

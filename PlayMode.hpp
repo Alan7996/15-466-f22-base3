@@ -17,30 +17,37 @@ struct PlayMode : Mode {
 	virtual void update(float elapsed) override;
 	virtual void draw(glm::uvec2 const &drawable_size) override;
 
-	//----- game state -----
+	void PlayMode::game_end(bool didWin);
+	void PlayMode::key_pressed(int color);
 
-	//input tracking:
-	struct Button {
-		uint8_t downs = 0;
-		uint8_t pressed = 0;
-	} left, right, down, up;
+	//----- game state -----
+	enum GameState {
+		PLAYING,
+		GAMEOVER,
+		WAITING,
+	} gameState;
 
 	//local copy of the game scene (so code can change it during gameplay):
 	Scene scene;
 
-	//hexapod leg to wobble:
-	Scene::Transform *hip = nullptr;
-	Scene::Transform *upper_leg = nullptr;
-	Scene::Transform *lower_leg = nullptr;
-	glm::quat hip_base_rotation;
-	glm::quat upper_leg_base_rotation;
-	glm::quat lower_leg_base_rotation;
-	float wobble = 0.0f;
+	//in-game objects to be managed:
+	Scene::Drawable *texts[5][5];
+	Scene::Drawable *black_screen;
+	Scene::Drawable *white_screen;
 
-	glm::vec3 get_leg_tip_position();
+	int activeTextRow = 0;
+	int activeTextCol = 0;
+	bool gotCorrect = false;
+
+	glm::vec3 text_display_pos[5] = {glm::vec3(0)};
+	glm::vec3 text_reset_pos = glm::vec3(0.0f, 0.0f, -5.0f);
+	
+	float elapsed_time_since = 0;
+	float color_interval = 3;
+	float total_time = 60;
 
 	//music coming from the tip of the leg (as a demonstration):
-	std::shared_ptr< Sound::PlayingSample > leg_tip_loop;
+	// std::shared_ptr< Sound::PlayingSample > leg_tip_loop;
 	
 	//camera:
 	Scene::Camera *camera = nullptr;
