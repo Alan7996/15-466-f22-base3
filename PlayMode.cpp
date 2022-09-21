@@ -92,6 +92,16 @@ PlayMode::PlayMode() : scene(*strooperz_scene) {
 		if (transform.name.length() == 2) {
 			transform.position = text_reset_pos;
 		}
+		if (transform.name == "GameWin") {
+			winlose_pos = transform.position;
+
+			gameWin = &transform;
+			transform.position = text_reset_pos;
+		}
+		else if (transform.name == "GameLose") {
+			gameLose = &transform;
+			transform.position = text_reset_pos;
+		}
 	}
 
 	//get pointer to camera for convenience:
@@ -113,7 +123,11 @@ PlayMode::~PlayMode() {
 }
 
 void PlayMode::game_end(bool didWin) {
+
 	gameState = GAMEOVER;
+	
+	if (didWin) gameWin->position = winlose_pos;
+	else gameLose->position = winlose_pos;
 }
 
 void PlayMode::key_pressed(int color) {
@@ -169,7 +183,10 @@ void PlayMode::update(float elapsed) {
 
 	if (elapsed_time_since > color_interval) {
 
-		if (!gotCorrect) game_end(false);
+		if (!gotCorrect) {
+			game_end(false);
+			return;
+		}
 
 		gotCorrect = false;
 		elapsed_time_since = 0;
@@ -222,25 +239,46 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		));
 
 		constexpr float H = 0.09f;
-		lines.draw_text("D/F/Space/J/K for colors",
-			glm::vec3(-aspect + 0.1f * H, -1.0 + 0.1f * H, 0.0),
-			glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
-			glm::u8vec4(0x00, 0x00, 0x00, 0x00));
 		float ofs = 2.0f / drawable_size.y;
-		lines.draw_text("D/F/Space/J/K for colors",
-			glm::vec3(-aspect + 0.1f * H + ofs, -1.0 + + 0.1f * H + ofs, 0.0),
-			glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
-			glm::u8vec4(0xff, 0xff, 0xff, 0x00));
 
 		if (gameState != GAMEOVER) {
-			lines.draw_text(std::to_string(static_cast<int>(total_time)),
+			lines.draw_text("D/F/Space/J/K for colors",
+				glm::vec3(-aspect + 0.1f * H, -1.0 + 0.1f * H, 0.0),
+				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
+				glm::u8vec4(0x00, 0x00, 0x00, 0x00));
+			lines.draw_text("D/F/Space/J/K for colors",
+				glm::vec3(-aspect + 0.1f * H + ofs, -1.0 + + 0.1f * H + ofs, 0.0),
+				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
+				glm::u8vec4(0xff, 0xff, 0xff, 0x00));
+
+			float remaining_time = color_interval - elapsed_time_since;
+			std::string time = std::to_string(static_cast<int>(remaining_time)) + "." + std::to_string(static_cast<int>(remaining_time * 10) % 10) + std::to_string(static_cast<int>(remaining_time * 100) % 10);
+			lines.draw_text(time,
 				glm::vec3(-aspect + 5.0f * H, -1.0 + 10.0f * H, 0.0),
 				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
 				glm::u8vec4(0x00, 0x00, 0x00, 0x00));
-			lines.draw_text(std::to_string(static_cast<int>(total_time)),
+			lines.draw_text(time,
 				glm::vec3(-aspect + 5.0f * H + ofs, -1.0 + + 10.0f * H + ofs, 0.0),
 				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
 				glm::u8vec4(0xff, 0xff, 0xff, 0x00));
+
+			lines.draw_text("Time : " + std::to_string(static_cast<int>(total_time)),
+				glm::vec3(aspect - 5.0f * H, -1.0 + 0.1f * H, 0.0),
+				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
+				glm::u8vec4(0x00, 0x00, 0x00, 0x00));
+			lines.draw_text("Time : " + std::to_string(static_cast<int>(total_time)),
+				glm::vec3(aspect - 5.0f * H + ofs, -1.0 + + 0.1f * H + ofs, 0.0),
+				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
+				glm::u8vec4(0xff, 0xff, 0xff, 0x00));
+		} else {
+			lines.draw_text("Gameover!",
+					glm::vec3(-aspect + 2.0f * H, -1.0 + 10.0f * H, 0.0),
+					glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
+					glm::u8vec4(0x00, 0x00, 0x00, 0x00));
+				lines.draw_text("Gameover!",
+					glm::vec3(-aspect + 2.0f * H + ofs, -1.0 + + 10.0f * H + ofs, 0.0),
+					glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
+					glm::u8vec4(0xff, 0xff, 0xff, 0x00));
 		}
 	}
 	GL_ERRORS();

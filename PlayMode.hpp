@@ -32,12 +32,14 @@ struct PlayMode : Mode {
 
 	//in-game objects to be managed:
 	Scene::Drawable *texts[5][5];
-	Scene::Drawable *black_screen;
-	Scene::Drawable *white_screen;
+	Scene::Transform *gameWin;
+	Scene::Transform *gameLose;
+
+	glm::vec3 winlose_pos = glm::vec3(0);
 
 	int activeTextRow = 0;
 	int activeTextCol = 0;
-	bool gotCorrect = false;
+	bool gotCorrect = true;
 
 	glm::vec3 text_display_pos[5] = {glm::vec3(0)};
 	glm::vec3 text_reset_pos = glm::vec3(0.0f, 0.0f, -5.0f);
